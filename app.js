@@ -20,22 +20,20 @@ form.addEventListener('submit', (e) => {
 });
 
 const getUserData = (IP) => {
-	axios
-		.get(
-			`https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_vGDbqjc2sIWwcKCQEoB7GsQqC7A8j&ipAddress${IP}`
-		)
+	fetch(
+		`https://geo.ipify.org/api/v2/country,city,vpn?apiKey=at_vGDbqjc2sIWwcKCQEoB7GsQqC7A8j&ipAddress${IP}`
+	)
+		.then((res) => res.json())
 		.then((res) => {
-			console.log(res);
-			userIp.innerText = res.data.ip;
-			userLocation.innerText = `${res.data.location.city}, ${res.data.location.country}`;
-			userTimezone.innerText = `UTC ${res.data.location.timezone}`;
-			userIsp.innerText = res.data.isp;
-			userLat = res.data.location.lat;
-			userLng = res.data.location.lng;
+			userIp.innerText = res.ip;
+			userLocation.innerText = `${res.location.city}, ${res.location.country}`;
+			userTimezone.innerText = `UTC ${res.location.timezone}`;
+			userIsp.innerText = res.isp;
+			userLat = res.location.lat;
+			userLng = res.location.lng;
 		})
 		.then(() => {
 			generateMap(userLat, userLng);
-			console.dir(map);
 		})
 		.catch((err) => {
 			console.error(err);
